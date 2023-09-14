@@ -9,7 +9,7 @@ import android.widget.TextView
 class MainActivity : AppCompatActivity() {
 //  Op is created to change the output screen
     private var Op : TextView? = null
-    private var lastnum = true
+    private var lastnum = false
     private var lastDot = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 //    output screen is cleared using clr fxn
     fun clr(view: View) {
         Op?.text = ""
-        lastnum = true
+        lastnum = false
         lastDot = false
     }
 
@@ -61,7 +61,6 @@ private fun isOperatorAdded(opScreen : String) : Boolean{
                 lastDot = false
             }
         }
-
     }
 
     private fun remove0(ans:String) : String {
@@ -77,41 +76,54 @@ private fun isOperatorAdded(opScreen : String) : Boolean{
         if(lastnum){
             var str: String = Op?.text.toString()
             var prefix = ""
-            if(str.startsWith("-")){
-                prefix = "-"
-                str = str.substring(1)
-            }
             try{
-                if(str.contains("-")) {
-                    val operands = str.split("-")
-                    if (prefix.isEmpty()) {
-                        Op?.text = remove0((operands[0].toDouble() - operands[1].toDouble()).toString())
-                    } else {
-                        Op?.text = remove0(((-(operands[0].toDouble())) + operands[1].toDouble()).toString())
-                    }
+                if(str.startsWith("-")){
+                    prefix = "-"
+                    str = str.substring(1)
                 }
-                else if(str.contains("+")) {
-                    val operands = str.split("+")
-                    if (prefix.isEmpty()) {
-                        Op?.text = remove0((operands[0].toDouble() + operands[1].toDouble()).toString())
-                    } else {
-                        Op?.text = remove0(((-(operands[0].toDouble())) + operands[1].toDouble()).toString())
+                when {
+                    str.contains("-") -> {
+                        val operands = str.split("-")
+                        if (prefix.isEmpty()) {
+                            Op?.text =
+                                remove0((operands[0].toDouble() - operands[1].toDouble()).toString())
+                        } else {
+                            Op?.text =
+                                remove0(((-(operands[0].toDouble())) + operands[1].toDouble()).toString())
+                        }
                     }
-                }
-                else if(str.contains("*")) {
-                    val operands = str.split("*")
-                    if (prefix.isEmpty()) {
-                        Op?.text = remove0((operands[0].toDouble() * operands[1].toDouble()).toString())
-                    } else {
-                        Op?.text = remove0(((-(operands[0].toDouble())) * operands[1].toDouble()).toString())
+
+                    str.contains("+") -> {
+                        val operands = str.split("+")
+                        if (prefix.isEmpty()) {
+                            Op?.text =
+                                remove0((operands[0].toDouble() + operands[1].toDouble()).toString())
+                        } else {
+                            Op?.text =
+                                remove0(((-(operands[0].toDouble())) + operands[1].toDouble()).toString())
+                        }
                     }
-                }
-                else{
-                    val operands = str.split("/")
-                    if (prefix.isEmpty()) {
-                        Op?.text = remove0((operands[0].toDouble() / operands[1].toDouble()).toString())
-                    } else {
-                        Op?.text = remove0(((-(operands[0].toDouble())) / operands[1].toDouble()).toString())
+
+                    str.contains("*") -> {
+                        val operands = str.split("*")
+                        if (prefix.isEmpty()) {
+                            Op?.text =
+                                remove0((operands[0].toDouble() * operands[1].toDouble()).toString())
+                        } else {
+                            Op?.text =
+                                remove0(((-(operands[0].toDouble())) * operands[1].toDouble()).toString())
+                        }
+                    }
+
+                    else -> {
+                        val operands = str.split("/")
+                        if (prefix.isEmpty()) {
+                            Op?.text =
+                                remove0((operands[0].toDouble() / operands[1].toDouble()).toString())
+                        } else {
+                            Op?.text =
+                                remove0(((-(operands[0].toDouble())) / operands[1].toDouble()).toString())
+                        }
                     }
                 }
             }catch(e:ArithmeticException){
